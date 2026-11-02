@@ -9,3 +9,4 @@ reports/
 test-results/
 *.log
 .DS_Store
+github_check.txt

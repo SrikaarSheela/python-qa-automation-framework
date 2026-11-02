@@ -1,0 +1,26 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.13.2, pytest-9.2.0, pluggy-1.7.0 -- /Users/srikaarreddy/Documents/Srikaar Documents/Projects/automation-testing/venv/bin/python
+cachedir: .pytest_cache
+metadata: {'Python': '3.13.2', 'Platform': 'macOS-27.2-arm64-arm-64bit-Mach-O', 'Packages': {'pytest': '9.2.0', 'pluggy': '1.7.0'}, 'Plugins': {'metadata': '3.1.1', 'html': '4.2.0', 'playwright': '0.10.0'}, 'JAVA_HOME': '/Library/Java/JavaVirtualMachines/jdk-23.jdk/Contents/Home'}
+rootdir: /Users/srikaarreddy/Documents/Srikaar Documents/Projects/automation-testing
+configfile: pytest.ini
+plugins: metadata-3.1.1, html-4.2.0, playwright-0.10.0
+collecting ... collected 5 items
+
+tests/ecommerce/test_sauce.py::test_valid_login[chromium] PASSED
+tests/ecommerce/test_sauce.py::test_add_product_to_cart[chromium] PASSED
+tests/ecommerce/test_sauce.py::test_remove_product[chromium] PASSED
+tests/ecommerce/test_sauce.py::test_complete_checkout[chromium] PASSED
+tests/ecommerce/test_sauce.py::test_invalid_login[chromium] PASSED
+
+=============================== warnings summary ===============================
+tests/ecommerce/test_sauce.py::test_valid_login[chromium]
+  /Users/srikaarreddy/Documents/Srikaar Documents/Projects/automation-testing/venv/lib/python3.13/site-packages/_pytest/fixtures.py:1392: PytestRemovedIn10Warning: Session-scoped fixtures defined as instance methods are deprecated.
+  Instance attributes set in the 'base_url' fixture will NOT be visible to test methods,
+  as each test gets a new instance while the fixture runs only once per class.
+  Use a @classmethod decorator below @pytest.fixture and set attributes on cls instead.
+  See https://docs.pytest.org/en/stable/deprecations.html#class-scoped-fixture-as-instance-method
+    fixturefunc = resolve_fixture_function(fixturedef, request)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+========================= 5 passed, 1 warning in 2.98s =========================

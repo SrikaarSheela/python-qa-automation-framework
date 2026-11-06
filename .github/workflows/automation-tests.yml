@@ -9,6 +9,27 @@ jobs:
   automation-tests:
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: ci_test_password
+          MYSQL_DATABASE: automation_test_db
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -pci_test_password"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    env:
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: ci_test_password
+      DB_NAME: automation_test_db
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -27,13 +48,45 @@ jobs:
         run: |
           python -m playwright install --with-deps chromium
 
-      - name: Run UI and API tests
+      - name: Initialize MySQL database
+        run: |
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          import mysql.connector
+
+          connection = mysql.connector.connect(
+              host=os.environ["DB_HOST"],
+              port=int(os.environ["DB_PORT"]),
+              user=os.environ["DB_USER"],
+              password=os.environ["DB_PASSWORD"],
+              database=os.environ["DB_NAME"]
+          )
+
+          try:
+              sql = Path("sql/init_ci_database.sql").read_text()
+              cursor = connection.cursor()
+              try:
+                  for statement in sql.split(";"):
+                      if statement.strip():
+                          cursor.execute(statement)
+                  connection.commit()
+              finally:
+                  cursor.close()
+          finally:
+              connection.close()
+
+          print("CI database initialized successfully")
+          PY
+
+      - name: Run UI API and database tests
         run: |
           mkdir -p reports
           python -m pytest \
             tests/api \
             tests/ecommerce \
             tests/test_login.py \
+            tests/database \
             --browser chromium \
             --html=reports/ci_report.html \
             --self-contained-html \

@@ -10,3 +10,6 @@ test-results/
 *.log
 .DS_Store
 github_check.txt
+
+lesson9_check.txt
+*.yml.backup
